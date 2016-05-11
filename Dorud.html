@@ -1,0 +1,266 @@
+<!-- Copyright © 2016, Xerxes Langerudi. All rights reserved. -->
+
+<!doctype html>
+
+<html>
+<head>
+	<title>Dorud Hasti</title>
+</head>
+<body>
+
+<canvas width="800" height="450"></canvas>
+
+<script type="text/javascript">
+
+var greetings = ["Dorud Hasti",
+		"Hello World", 
+		"Hallo Wellt",
+		"Hallo Wereld",
+		"Hej varlden",
+		"Hej Verden",
+		"Hei verden",
+		"Hei maailma"];
+
+var nohelper = true;
+
+/**** Laptop ***/
+
+var cx = document.querySelector("canvas").getContext("2d");
+
+cx.beginPath();
+
+// Monitor
+cx.moveTo(200, 20);
+cx.lineTo(600, 20);
+cx.lineTo(600, 210);
+cx.lineTo(200, 210);
+cx.lineTo(200, 20);
+
+// Display
+cx.moveTo(210, 30);
+cx.lineTo(210, 190);
+cx.lineTo(590, 190);
+cx.lineTo(590, 30);
+cx.lineTo(210, 30);
+
+// Main top
+cx.moveTo(200, 211);
+cx.lineTo(170, 310);
+cx.lineTo(630, 310);
+cx.lineTo(600, 211);
+
+// Main front
+cx.moveTo(170, 311);
+cx.lineTo(170, 322);
+cx.lineTo(630, 322);
+cx.lineTo(630, 311);
+
+// Keyboard
+cx.moveTo(205, 230);
+cx.lineTo(595, 230);
+cx.lineTo(609, 280);
+cx.lineTo(191, 280);
+cx.lineTo(205, 230);
+
+// TouchPad
+cx.moveTo(375, 285);
+cx.lineTo(427, 285);
+cx.lineTo(430, 305);
+cx.lineTo(372, 305);
+cx.lineTo(375, 285);
+
+cx.fillStyle = "fuchsia";
+cx.fill();
+
+// Off/On
+cx.moveTo(575, 215);
+cx.lineTo(590, 215);
+cx.lineTo(593, 225);
+cx.lineTo(577, 225);
+cx.lineTo(575, 215);
+
+cx.fillStyle = "white";
+cx.fill();
+
+cx.stroke();
+
+function clearDisplay()
+{
+	// Clear display
+	cx.rect(211, 31, 378, 158);
+	cx.fillStyle = "white";
+	cx.fill();
+
+	// Logo
+	cx.fillStyle = "fuchsia";
+	cx.font = "10px Verdana";
+	cx.fillText("Langerudi", 375, 202);
+}
+
+function greet()
+{
+	// Dorud Hasti
+	var counter = 0;
+
+	greeter = setInterval(function()
+	{
+		clearDisplay();
+
+		// Text
+		cx.fillStyle = "fuchsia";
+		cx.font = "30px Verdana";
+		cx.fillText(greetings[counter++], 310, 100);
+
+		(counter == greetings.length) && (counter = 0);
+	}, 500);
+}
+
+addEventListener("keydown", function(event)
+{
+	// Help
+	if (event.keyCode == 72)
+	{
+		teach();
+	}
+});
+
+var turnedOn = false;
+var booted = false
+
+function laptopOnKey()
+{
+	turnedOn = true;
+
+	clearDisplay();
+
+	cx.fillStyle = "fuchsia";
+	cx.font = "25px Verdana";
+
+	var i = 0;
+
+	bootOperatingSystem = setInterval(function()
+	{
+		// Draw each dot in the progress bar 20px away on the X axis
+		cx.fillText(".", 300 + (i++ * 20), 100);
+
+		if (i > 10)
+		{
+			booted = true;
+			clearInterval(bootOperatingSystem);
+			greet();
+		}
+	}, 100);
+}
+
+function laptopKeyboard()
+{
+	clearDisplay();
+
+	cx.fillStyle = "fuchsia";
+	cx.font = "25px Verdana";
+	cx.fillText("Unauthorized access", 270, 100);
+}
+
+function laptopTouchPad()
+{
+	clearDisplay();
+
+	cx.fillStyle = "fuchsia";
+	cx.font = "25px Verdana";
+	cx.fillText("Unauthorized access", 270, 100);
+}
+
+function help()
+{
+	setTimeout(function()
+{
+	cx.fillStyle = "fuchsia";
+	cx.font = "25px Verdana";
+	cx.fillText("?", 775, 25);
+}, 10000);
+
+	nohelper = false;
+}
+
+function teach()
+{
+	if(confirm("Do you want to learn programming?"))
+	{
+		window.location = "Amuzesh.html";
+	}
+	else
+	{
+		setTimeout(function()
+{
+	window.location = "Benush.html";
+}, 2000);
+	}
+}
+
+cx.canvas.addEventListener("click", function(event)
+{
+	var x = event.clientX;
+	var y = event.clientY;
+
+
+	if ((x > 585 && x < 600) && (y > 225 && y < 235))
+	{
+		// If turned off and operating system not already running
+		if (!turnedOn && booted == false)
+		{
+			laptopOnKey();
+		}
+		else
+		{
+			cx.fillStyle = "fuchsia";
+			cx.font = "25px Verdana";
+			cx.fillText("Unauthorized access", 270, 100);
+		}
+	}
+
+	// If turned on and operating system not already running
+	if (turnedOn && booted == true)
+	{
+		if ((x > 215 && x < 605) && (y > 240 && y < 290))
+		{
+			laptopKeyboard();
+		}
+
+		if ((x > 385 && x < 435) && (y > 295 && y < 315))
+		{
+			laptopTouchPad();
+		}
+	}
+
+	if (turnedOn && nohelper)
+	{
+		help();
+	}
+	else
+	{
+		if ((x > 785 && x < 795) && (y > 15 && y < 35))
+		{
+				teach();
+		}
+	}
+
+
+});
+
+cx.fillStyle = "fuchsia";
+cx.font = "10px Verdana";
+cx.fillText("Copyright (C) 2016, Xerxes Langerudi. All rights reserved.", 499, 440);
+cx.closePath();
+
+setTimeout(function()
+{
+	cx.beginPath();
+	cx.rect(499, 433, 301, 20);
+	cx.fillStyle = "white";
+	cx.fill();
+}, 1000)
+
+</script>
+
+</body>
+</html>
