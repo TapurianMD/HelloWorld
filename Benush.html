@@ -1,0 +1,274 @@
+<!-- Copyright © 2016, Xerxes Langerudi. All rights reserved. -->
+
+<!doctype html>
+
+<html>
+<head>
+	<title>Benush</title>
+</head>
+<body>
+
+<canvas width="1266" height="650"></canvas>
+
+<script type="text/javascript">
+
+var Mode = "Choice";
+var hot;
+
+/**** Nourishment machine ***/
+
+var cx = document.querySelector("canvas").getContext("2d");
+
+cx.beginPath();
+
+cx.strokeStyle = "black";	
+
+// Big panel
+cx.fillStyle = "turquoise";
+cx.fillRect(633, 100, 100, 250);
+cx.strokeRect(633, 100, 100, 250);
+	
+// Top panel
+cx.fillStyle = "grey";
+cx.fillRect(553, 100, 80, 50);
+cx.strokeRect(553, 100, 80, 50);
+
+// Cup place
+cx.fillStyle = "white";
+cx.fillRect(553, 150, 80, 80);
+cx.strokeRect(553, 150, 80, 80);
+
+// Bottom panel
+cx.fillStyle = "grey";
+cx.fillRect(553, 230, 80, 120);
+cx.strokeRect(553, 230, 80, 120);
+
+// Cup
+cx.fillStyle = "white";
+//cx.fillRect(578, 180, 30, 40);
+//cx.strokeRect(578, 180, 30, 40);
+
+cx.moveTo(578, 180);
+cx.lineTo(578, 220);
+cx.lineTo(608, 220);
+cx.lineTo(608, 180);
+
+// Cup handle
+cx.moveTo(608, 192);
+cx.lineTo(616, 192);
+cx.lineTo(616, 208);
+cx.lineTo(608, 208);
+
+cx.stroke();
+
+// Nozzle
+cx.fillStyle = "black";
+cx.fillRect(588, 150, 10, 20);
+cx.strokeRect(588, 150, 10, 20);
+
+
+// Coffee button
+cx.fillStyle = "white";
+cx.fillRect(650, 163, 6, 6);
+cx.strokeRect(650, 163, 6, 6);
+
+// Text
+cx.fillStyle = "grey";
+cx.font = "10px Verdana";
+cx.fillText("Coffee", 660, 169);
+
+
+// Tea
+cx.fillStyle = "white";
+cx.fillRect(650, 179, 6, 6);
+cx.strokeRect(650, 179, 6, 6);
+
+// Text
+cx.fillStyle = "grey";
+cx.font = "10px Verdana";
+cx.fillText("Tea", 660, 185);
+
+
+// Cocoa
+cx.fillStyle = "white";
+cx.fillRect(650, 195, 6, 6);
+cx.strokeRect(650, 195, 6, 6);
+
+// Text
+cx.fillStyle = "grey";
+cx.font = "10px Verdana";
+cx.fillText("Cocoa", 660, 201);
+
+// Tea
+cx.fillStyle = "white";
+cx.fillRect(650, 211, 6, 6);
+cx.strokeRect(650, 211, 6, 6);
+
+// Text
+cx.fillStyle = "grey";
+cx.font = "10px Verdana";
+cx.fillText("Water", 660, 217);
+
+function fill(liquid)
+{
+	var i = 0;
+	var liquidLevel;
+	var liquidColor;
+
+	liquidColor = liquid == "Coffee"? "black" : liquid == "Tea"? "brown" : liquid == "Cocoa"? "brown" : liquid == "Water"? "blue" : 0;
+
+	hot = liquid == "Coffee" || liquid == "Tea" || liquid == "Cocoa"? true : false;
+
+	// Spray
+	spray = setInterval(function()
+{
+	cx.fillStyle = liquidColor;
+	cx.fillRect(592, 171, 2, i++);
+
+	if (i > 48)
+	{
+		i = 0;
+
+		// Raise level
+		raiseLevel = setInterval(function()
+{
+
+	cx.fillStyle = liquidColor;
+	i++;
+	liquidLevel = 179 + 40 - i;
+
+	cx.fillRect(579, liquidLevel, 28, i);
+
+	// Write Hello World
+	cx.fillStyle = "white";
+	cx.font = "8px Verdana";
+	cx.fillText("Dorud", 580, 200);
+	cx.fillText("Hasti", 580, 210);
+
+	if (i > 28)
+	{
+		clearInterval(raiseLevel);
+		cx.fillStyle = "white";
+		cx.fillRect(592, 171, 2, liquidLevel - 171);
+		Mode = "Full";
+	}
+}, 50);
+		clearInterval(spray);
+	}
+}, 10);
+
+}
+
+cx.canvas.addEventListener("click", function(event)
+{
+	var x = event.clientX;
+	var y = event.clientY;
+
+	// If filling process have not already started
+
+	// First button
+	if ((x > 657 && x < 665) && (y > 171 && y < 179))
+	{
+		if (Mode == "Choice")
+		{
+			fill("Coffee");
+
+			Mode = "Choosed";
+		}
+		else
+		{
+			//blink();
+			alert("Drink already choosen");
+		}
+	}
+
+	// Second button
+	if ((x > 657 && x < 665) && (y > 187 && y < 195))
+	{
+		if (Mode == "Choice")
+		{
+			fill("Tea");
+
+			Mode = "Choosed";
+		}
+		else
+		{
+			//blink();
+			alert("Drink already choosen");
+		}
+	}
+
+	// Third button
+	if ((x > 657 && x < 665) && (y > 203 && y < 211))
+	{
+		if (Mode == "Choice")
+		{
+			fill("Cocoa");
+
+			Mode = "Choosed";
+		}
+		else
+		{
+			//blink();
+			alert("Drink already choosen");
+		}
+	}
+
+	// Fourth button
+	if ((x > 657 && x < 665) && (y > 219 && y < 226))
+	{
+		if (Mode == "Choice")
+		{
+			fill("Water");
+
+			Mode = "Choosed";
+		}
+		else
+		{
+			//blink();
+			alert("Drink already choosen");
+		}
+	}
+
+	// If filling && hot
+
+	// Danger: HOT LIQUIDS
+	if ((x > 560 && x < 642) && (y > 158 && y < 239	))
+	{
+		if (Mode == "Choosed" && hot)
+		{
+			alert("Danger: HOT LIQUIDS");
+		}
+	}
+
+	// Cup
+	if ((x > 585 && x < 617) && (y > 188 && y < 229	))
+	{
+		if (Mode == "Full")
+		{
+			alert("To the first 100 who show us they have learned programming, we will offer a cup of coffee, tea, cocoa milk or water, in a conference held in London later this year! Use the time you have left to practise and comming up we will announce the conditions that apply!");
+		}
+		else if (Mode == "Choice")
+		{
+			//Pick a drink
+			alert("Pick a drink");
+		}
+	}
+});
+
+cx.fillStyle = "fuchsia";
+cx.font = "10px Verdana";
+cx.fillText("Copyright (C) 2016, Xerxes Langerudi. All rights reserved.", 965, 640);
+
+setTimeout(function()
+{
+	cx.beginPath();
+	cx.rect(965, 633, 301, 20);
+	cx.fillStyle = "white";
+	cx.fill();
+}, 1000)
+
+</script>
+
+</body>
+</html>
